@@ -1,0 +1,11 @@
+renderer ：renderer函数是一个拦截者模式，用于改变渲染到单元格的样式或值
+参数
+value:当前单元格数据的值
+metaData:当前单元格的元数据集合，通过渲染器可以直接使用或修改它的部分属性值，常用的属性值有：tdCls,tdAttr,style.
+record:当前单元格所在的行的全部数据。如果要取得dataIndex:'age'的值，方式如下：
+record.get('get'); record.data.age; record.data['age']; record.raw.age;record.raw.['age']
+rowIndex:当前行号
+colIndex:当前列号
+store:当前grid的数据集
+view:当前grid所属视图
+return:返回一个被渲染的html文本串
