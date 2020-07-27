@@ -1,0 +1,161 @@
+bundles.xml
+hibernate.nationalstandard.mysql.cfg.xml 添一些东西
+
+http://localhost:8080/?source=amili&theme=gray#nationstandard
+
+
+
+
+main.js?
+
+
+增
+删
+改
+名称模糊查询
+查询所有数据
+
+
+extjs5以后，增加了MVVM设计思想，就是在extjs4的mvc的基础上多了一个viewmodel
+你提到的alias就是这个类的别名，别名的命名要遵守mvvm命名要求,要不然在使用的时候就会报错。
+即view的别名用widget.XX
+controller的别名用'controller.XX
+viewmodel的别名用viewmodel.XX
+其中widget别名主要用于xtype:XX
+controller和viewmodel就是在view做绑定的，不能写错的
+
+
+
+
+
+
+1. requires: [
+        'Amili.amili.ux.VTypes',
+        'Amili.rolestandard.view.ListViewController',
+        'Amili.rolestandard.view.ListViewModel',
+        // 'Amili.rolestandard.view.AddView',
+        // 'Amili.rolestandard.view.EditView'
+    ],
+把下面的注释掉，没有发现影响。
+2.formulas: {
+        hasSelectedOne: {
+            bind: {
+                bindTo: '{roleStandardList.selection}',
+                deep: true
+            },
+            get: function (record) {
+                return record !== null;
+            }
+        }
+    }
+listViewModel里的这个是干嘛的？
+3.                // idx = store.findExact('id',value),
+listView中渲染的这段代码是干嘛的？
+4.doUpdate: function (startDate, endDate, date) {
+         this.lookupReference('searchButton').fireEvent('click', this.lookupReference('searchButton'));
+    },
+ListViewController中的这个方法。
+
+
+
+
+
+ reference: 'inDirectForm',
+ reference: 'inDirectRow',
+
+
+
+
+日期选择 送检日期查询
+标本送检
+序号 操作 送检单号 送检单位 检测单位 标本类型 送检人员 送检时间 送检数量 送检状态
+
+差三个字段   送检单位 检测单位 送检状态
+
+时间倒序
+点击变化  右侧显示单据信息  右侧展示参阅9.0中送检
+
+
+任务：
+再次送检的功能实现
+通过HttpClientUtil中的postShinowReturnMsg方法发送，最后一个字段为拼接好的json
+
+
+检测血站检测完毕后，发送报告，平台进行报告接收，报告接收
+送检结果报告的界面和显示
+
+点击操作按钮调用检测血站接口获取报告单信息。 调用接口，返回的是一个html页面。
+
+不合格字段标红
+4.5.3任务，
+根据表
+tbl_cs_test_rpt_receive
+tbl_cs_test_result
+tbl_cs_test_item_result
+还有一个标本交接单的表tbl_cs_sam_sample
+·····················
+接收日期
+送检单号
+报告单号
+不显示
+
+签发时间
+可以不显示，如果要显示的话，就显示最新的那个报告的签发时间，
+因为一个报告单可能会发送两次，第一次没有检测结果，第二次有检测结果。（好像是这个意思）
+
+
+目前需要的东西：
+检测进程查询表：需要明确的数据库表关系结构，通过查询，拼凑出要用的数据内容
+检测进程查询的排序显示问题，
+
+修改完善findProcess方法。拆分方法体
+三个模块功能，一个存储功能 ，代码回顾，完善优雅
+SampleSendApi中的存储数据
+
+·····················
+单元格背景颜色渲染：
+js文件
+  if (value === '40007000'){
+      metaData.tdCls = 'red';
+  }else if (value === '40006800'){
+      metaData.tdCls = 'orange';
+  }
+css文件中
+.x-grid-cell.orange
+{
+    background-color: #F79709;
+}
+.x-grid-cell.red
+{
+    background-color: #CD4F39;
+}
+
+
+
+CSendArchiveReuploadInfo：除了聊天记录里的需求，送检血站和检测血站的字段也要加在这里面
+sendActInfoApi
+
+
+
+检测进程中，下方工具栏没有添加监听事件，当从其发生变化时，无法隐藏空数据列
+bug：检测报告和检测进程查询，一起打开的时候，关闭的时候上下工具栏都会消失
+reason：检测报告的字段中，有一个字段的id，和检测进程中的一样，而且在检测进程中，获取了一次这个id，所以造成混乱
+
+7/27:
+
+
+1. 传值id没有对应，逻辑流程不清，混乱
+2. js调用的方法，写了两个同名但是内容不一样的，马虎错误
+3.hibernate的hbm.xml映射文件，时间的属性应该用timestamp，之前用的date，所以只存了日期，没有时间。
+在显示的的时候，js实体类的时间格式写的'Y-m-d '，所以显示不出来，应该用'Y-m-d H:i:s'
+
+
+history：
+历史操作里的数据显示渲染，目前没遇到过，不知道实际作用
+
+renderer: function (value, metaData) {
+            if (value !== undefined) {
+                metaData.tdAttr = 'data-qtip="' + value + '"';
+            }
+            return value !== undefined ? value.replace(/<[^>]+>/g, '') : '';
+        }
