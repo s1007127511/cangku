@@ -923,9 +923,13 @@ map使用:将一个元素转换成另一个元素
 flatMap使用:将一个对象转换成流
 peek使用:遍历操作
 sorted使用:排序
+List<类的泛型> 新的集合 = 排序的集合.stream().sorted(Comparator.comparing(集合中的类::属性字段).reversed()).collect(Collectors.toList());
+倒序 .reversed()
+stream流转换成集合  .collect(Collectors.toList());
+
 distinct使用:去重
 根据对象中的单属性去重
-List<UploadSampleInfo> sampleInfoList2 = 去重的集合.stream().filter(distinctByKey(集合中的类::属性字段)).collect(Collectors.toList());
+List<类的泛型> 新的集合 = 去重的集合.stream().filter(distinctByKey(集合中的类::属性字段)).collect(Collectors.toList());
 
 static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
@@ -984,8 +988,11 @@ Z	时区			        RFC 822 time zone	    -0800
 ————————————————
 Jul 23, 2020 8:53:35 AM
 MMM dd, yyyy k:mm:ss a
-
-
+————————————————
+mysql映射的字段过长时，可以用这种方法，自定义length，
+ <property name="ChangeInfo" type="text" >
+            <column name="Change_Info" length = "16777216" />
+        </property>
 
 
 
