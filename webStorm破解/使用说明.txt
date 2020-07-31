@@ -1,0 +1,4 @@
+打开HELP中的Edit Custom VM Options,并在最后一行添加
+windows：-javaagent:D:\jetbrains-agent\another\jetbrains-agent-v3.2.0.de72.619
+-javaagent:后面是jetbrains-agent的路径，最好是全英文
+然后重启，将code激活码，添加进去，active激活，就可以了

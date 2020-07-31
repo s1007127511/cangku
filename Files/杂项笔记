@@ -165,10 +165,25 @@ reason：检测报告的字段中，有一个字段的id，和检测进程中的
 
 history：
 历史操作里的数据显示渲染，目前没遇到过，不知道实际作用
-
 renderer: function (value, metaData) {
             if (value !== undefined) {
                 metaData.tdAttr = 'data-qtip="' + value + '"';
             }
             return value !== undefined ? value.replace(/<[^>]+>/g, '') : '';
         }
+
+ngnix.conf
+改成自己的ip，端口号也对应好
+_view 是前端的，不用管端口号，但是要改ip
+
+
+
+
+
+
+
+
+
+
+
+智能采血 十一月底
