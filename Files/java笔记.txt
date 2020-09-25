@@ -993,9 +993,15 @@ mysql映射的字段过长时，可以用这种方法，自定义length，
  <property name="ChangeInfo" type="text" >
             <column name="Change_Info" length = "16777216" />
         </property>
-
-
-
+————————————————
+姓&emsp;&emsp;名
+排&ensp;序&ensp;码
+————————————————
+内连接：符合ON的显示，不符合的不显示
+外连接：
+左外连接：左边的数据全部显示，符合ON条件的将右表的值添加在左表后，不符合ON条件的，右边的显示null
+右外连接：和左外连接相反
+UNION ALL:就是将两个字段一样的表，整合在一起，后续可以通过Order By排序
 
 
 

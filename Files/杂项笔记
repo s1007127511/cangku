@@ -172,6 +172,36 @@ renderer: function (value, metaData) {
             return value !== undefined ? value.replace(/<[^>]+>/g, '') : '';
         }
 
+
+
+
+--------------------------------------
+智能采血
+8月5日完成体检方案
+体检数据库 t_dnm_def_pe_xxx
+
+后台
+collect-blood-service中
+BloodCollectionPermission添加查看管理权限
+前台router
+index.js中添加
+
+
+直接影响   两条显示   （献血者状态和淘汰时长）
+规则性影响  表格显示
+
+8月10日完成献血前检测方案
+
+
+采样登记
+姓&emsp;&emsp;名
+排&ensp;序&ensp;码
+
+
+
+
+--------------------------------------
+
 ngnix.conf
 改成自己的ip，端口号也对应好
 _view 是前端的，不用管端口号，但是要改ip
