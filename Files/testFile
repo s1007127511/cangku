@@ -1,0 +1,126 @@
+新增保存:
+保存时先判断是否检测结果不合格，
+如不合格必须有献血码，
+验证通过后保存体检信息（T_DNM_PST）
+保存初筛、血常规结果信息（T_DNM_PST_ITEMS、T_DNM_IT_ITEMS），
+保存备注信息（T_DNM_DONOR_REMARK）、
+记录操作 跟踪，保存项目时（testItemInfo），如果存在不合格项目（血常规项目且献血流程中勾选血常规不影响献血者，不再影响献血者），
+
+
+
+
+
+获取相关方案中的项目是否影响献血者（t_dnm_def_pst_test_item_result中EFFECT_DOR=1），
+2.9.1如果影响献血者状态（t_dnm_def_pst_test_item_result(初筛项目明细结果)中DOR_STATUS_UUID）为空，
+获取规则性影响献血者规则字典
+（其中淘汰次数，按照当前献血者所有历次指定检测项目淘汰的次数;如果次数+1>=规则中设置的淘汰次数，且指定的淘汰项目匹配）,
+
+2.9.2如果献血者状态（t_dnm_def_pst_test_item_result中DOR_STATUS_UUID或者规则性影响献血者中DOR_STATUS_UUID）为延缓淘汰（2延缓献血 1停止献血），
+
+在体检登记时间基础上，根据淘汰的年月日计算最终淘汰结束时间点（t_dnm_def_pst_test_item_result中DISCARD_YEAR、DISCARD_MONTH、DISCARD_DAY或规则性影响献血者规则中的年月日）。
+
+2.9.3保存至T_DNM_DISCARD ，其中淘汰开始时间为登记时间（DiscardStartDate），延缓状态下记录淘汰结束时间（2.5.5.2中计算方式）
+✔标识
+血站标识
+名称
+献血记录标识
+各环节业务标识
+献血码
+检测项目标识
+检测结果结果
+定量数据
+献血者状态标识
+✔淘汰开始时间
+✔淘汰结束时间
+✔是否启用
+✔末次修改人
+✔末次修改时间
+
+2.9.4 如果初筛不合格或血常规不合格，  更新T_DNM_DONOR表DISCARDED，T_DNM_DIS_TACHE_DONOR表
+2.9.5如果初筛不合格或血常规不合格，   更新档案状态T_DNM_ARCHIVES表中的DOR_STATUS_UUID字段
+t_def_dor_status 获取优先级
+
+一共四个表：
+T_DNM_DISCARD   :插入新数据。--除了 淘汰开始时间、淘汰结束时间、末次修改人、末次修改时间 都不为空，为了测试先做更改，回头改回来
+T_DNM_DONOR :更新DISCARDED
+T_DNM_DIS_TACHE_DONOR ：插入新数据 (TACHE_UUID字段，一个环节一条记录)
+T_DNM_ARCHIVES ：获取优先级后更新正确的DOR_STATUS_UUID
+
+
+--停止献血（开始时间），延缓献血是（开始时间+结束时间），这两种情况之外（影响献血者为false。四个表都不做处理，（其实这种情况也不应该进来，但是还是做一下处理））
+填一个接口方法：血常规不影响献血者时？，根据环节id，去查找对应itemId，然后将discard表中的对应itemId的数据的enable字段置为false。
+弄这个，根据环节id和itemId确认数据，修改enable
+
+两种情况都要弄四个数据库
+
+保存T_DNM_DISCARD
+更新本条T_DNM_DONOR表的DISCARDED为true
+T_DNM_DIS_TACHE_DONOR表添加一条记录
+更新T_DNM_ARCHIVES表中的DOR_STATUS_UUID  ：不合格项目和不合格人联查，通过优先级最大的，得到状态
+
+
+
+本周计划：淘汰流程完成，随测bug完善，相关业务人员完善，按照规范完善前后台，血液交接页面搭建。
+
+
+
+人员列表：数据库加一条
+岗位管理添加新的岗位信息
+部门管理给已有的人员添加新的岗位
+在后台代码添加Options信息
+在前台代码用grap取出Options信息
+
+采样登记 只做了献血码扫码的增删改查，其他的应该还没有处理，还需要详细了解
+
+淘汰加字段？判断是新增淘汰信息还是删除淘汰信息
+t_dnm_dis_tache_donor加delete
+t_dnm_dis_tache_donor 环节删除
+
+
+
+
+淘汰流程 DisTacheDonorService的discardTacheDonor方法，
+血常规环节不影响献血者的方法 DiscardService的updateDiscardEnableByTacheIdAndItemId方法
+都提交上去了
+
+
+采样登记：
+扫码的时候
+从空
+输入条码，判断是操作还是加载，
+如果操作，判断是新增还是修改
+微信预约码？献血码？预登码？
+扫码？保存还是加载？--首次扫码是加载
+增：
+删：
+改：
+查：
+
+
+
+淘汰删除：
+
+
+淘汰任务：
+①：取最大程度的淘汰状态
+②：淘汰项表新增   PhysicalExaminationItemBean这个实体
+③：正常的淘汰流程
+
+
+
+
+
+采样登记：
+问题：
+1 删除重置页面
+2 删除环节表更新
+3 新增删除的提示信息
+4 第一遍扫码给参数实体带上数据库时间传给前台，不在前台赋值。
+5 浏览状态，扫码后应该还是浏览
+
+淘汰流程：
+淘汰流程表，是用来看每个献血者有几个淘汰流程
+
+
+方案：已启用才能修改,不在编辑状态结果明细也能查看，根据项目信息状态判断结果明细状态
+

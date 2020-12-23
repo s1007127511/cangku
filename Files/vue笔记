@@ -1,0 +1,50 @@
+“:” 是指令 “v-bind”的缩写，“@”是指令“v-on”的缩写；“.”是修饰符。
+
+v-bind 指令可以用于响应式地更新 HTML 特性：
+
+<div id="app-2">
+<span v-bind:title="message">
+鼠标悬停几秒钟查看此处动态绑定的提示信息！
+</span>
+</div>
+
+
+var app2 = new Vue({
+el: '#app-2',
+data: {
+message: '页面加载于 ' + new Date().toLocaleString()
+}
+})
+
+该指令的意思是：“将这个元素节点的 title 特性和 Vue 实例的 message 属性保持一致”。如果你再次打开浏览器的 JavaScript 控制台，
+输入 app2.message = '新消息'，就会再一次看到这个绑定了 title 特性的 HTML 已经进行了更新。
+
+v-on 指令，它用于监听 DOM 事件：
+<a v-on:click="doSomething">...</a>
+v- 前缀作为一种视觉提示，用来识别模板中 Vue 特定的特性。当你在使用 Vue.js 为现有标签添加动态行为 (dynamic behavior) 时，v- 前缀很有帮助，
+然而，对于一些频繁用到的指令来说，就会感到使用繁琐。
+同时，在构建由 Vue.js 管理所有模板的单页面应用程序 (SPA - single page application) 时，v- 前缀也变得没那么重要了。
+因此，Vue.js 为 v-bind 和 v-on 这两个最常用的指令，提供了特定简写：
+
+v-bind 缩写
+<!-- 完整语法 -->
+<a v-bind:href="url">...</a>
+<!-- 缩写 -->
+<a :href="url">...</a>
+
+v-on 缩写
+<!-- 完整语法 -->
+<a v-on:click="doSomething">...</a>
+<!-- 缩写 -->
+<a @click="doSomething">...</a>
+
+它们看起来可能与普通的 HTML 略有不同，但 : 与 @ 对于特性名来说都是合法字符，在所有支持 Vue.js 的浏览器都能被正确地解析。
+而且，它们不会出现在最终渲染的标记中。缩写语法是完全可选的，但随着你更深入地了解它们的作用，你会庆幸拥有它们。
+
+修饰符
+
+修饰符 (Modifiers) 是以半角句号 . 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。
+例如，.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：
+<form v-on:submit.prevent="onSubmit">...</form>
+
+官方文档：https://cn.vuejs.org/v2/guide/syntax.html#%E5%8F%82%E6%95%B0

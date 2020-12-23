@@ -1005,7 +1005,29 @@ UNION ALL:就是将两个字段一样的表，整合在一起，后续可以通�
 
 
 
-
+SELECT n.UUID,n.NAME,n.DESCRIBE_INFO,n.PRIORITY FROM
+(
+SELECT * FROM
+t_def_dor_status t,
+(SELECT
+dorStatusId as discardItemDorStatus,
+arcId,
+DOR_STATUS_UUID as discardDorDorStatus
+FROM
+t_dnm_discard_donor t3
+INNER JOIN
+(
+SELECT t1.DOR_STATUS_UUID as dorStatusId,
+t2.ARC_UUID as arcId
+FROM t_dnm_discard t1
+INNER JOIN t_dnm_donor t2
+ON t1.DONOR_UUID = t2.UUID
+) t4
+ON t3.ARC_UUID = t4.arcId) t6
+WHERE t.UUID = t6.discardItemDorStatus
+or
+t.UUID = t6.discardDorDorStatus) n
+order by n.PRIORITY desc
 
 
 
